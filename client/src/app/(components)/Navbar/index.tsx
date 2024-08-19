@@ -1,17 +1,34 @@
 "use client";
-import React from 'react'
+
+import { useAppDispatch, useAppSelector } from "@/app/redux";
+import { setIsDarkMode, setIsSidebarCollapsed } from "@/state";
 import { Bell, Menu, Moon, Settings, Sun } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import React from "react";
 
 const Navbar = () => {
+  const dispatch = useAppDispatch();
+  const isSidebarCollapsed = useAppSelector(
+    (state) => state.global.isSidebarCollapsed
+  );
+  const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
+
+  const toggleSidebar = () => {
+    dispatch(setIsSidebarCollapsed(!isSidebarCollapsed));
+  };
+
+  const toggleDarkMode = () => {
+    dispatch(setIsDarkMode(!isDarkMode));
+  };
+
   return (
     <div className="flex justify-between items-center w-full mb-7">
-        {/* LEFT SIDE */}
-        <div className="flex justify-between items-center gap-5">
+      {/* LEFT SIDE */}
+      <div className="flex justify-between items-center gap-5">
         <button
           className="px-3 py-3 bg-gray-100 rounded-full hover:bg-blue-100"
-          onClick={()=>{}}
+          onClick={toggleSidebar}
         >
           <Menu className="w-4 h-4" />
         </button>
@@ -27,15 +44,18 @@ const Navbar = () => {
             <Bell className="text-gray-500" size={20} />
           </div>
         </div>
-        </div>
-        {/* RIGHT SIDE */}
+      </div>
+
+      {/* RIGHT SIDE */}
       <div className="flex justify-between items-center gap-5">
         <div className="hidden md:flex justify-between items-center gap-5">
           <div>
-            <button onClick={()=>{}}>
-            
+            <button onClick={toggleDarkMode}>
+              {isDarkMode ? (
                 <Sun className="cursor-pointer text-gray-500" size={24} />
-             
+              ) : (
+                <Moon className="cursor-pointer text-gray-500" size={24} />
+              )}
             </button>
           </div>
           <div className="relative">
@@ -46,21 +66,16 @@ const Navbar = () => {
           </div>
           <hr className="w-0 h-7 border border-solid border-l border-gray-300 mx-3" />
           <div className="flex items-center gap-3 cursor-pointer">
-          <div className="flex items-center gap-3 cursor-pointer">
-            <div className="w-9 h-9">image</div>
-            
+            Image
             <span className="font-semibold">Miley</span>
           </div>
         </div>
-        
-      </div>
-      <Link href="/settings">
+        <Link href="/settings">
           <Settings className="cursor-pointer text-gray-500" size={24} />
         </Link>
-      
+      </div>
     </div>
-    </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
